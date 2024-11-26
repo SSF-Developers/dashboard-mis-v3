@@ -1,0 +1,58 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.Qr_image {
+  margin-bottom: 20px; /* Adjust spacing as needed */
+  margin-top: 10px
+}
+
+.Qr_image img {
+  max-width: 100%; /* Ensure image doesn't exceed container width */
+}
+
+.container-item {
+  display: flex;
+  justify-content: right; /* Center the items horizontally */
+  align-items: center; /* Center the items vertically */
+  padding: 5px; /* Add some padding if needed */
+  width: 100%; /* Ensure the container takes up the full width */
+  box-sizing: border-box; /* Ensure padding is included in the element's total width and height */
+  flex-direction: row;
+}
+
+.select-dropdown {
+  width: 100%; /* Ensure the select takes up the full width of its container */
+}
+
+.delete-button {
+  margin-left: 10px; /* Push the button to the right */
+}
+
+.edit-button {
+  margin-left: 10px; /* Push the button to the right */
+}
+.add-button {
+  /* margin-left: auto; */
+  margin-left: 10px; /* Push the button to the right */
+
+}
+
+.big-checkbox {
+  width: 35px;
+  height: 35px;
+  cursor: pointer;
+  margin-left: 10px; /* Push the button to the right */
+  margin-top: 6px; /* Push the button to the right */
+}
+
+.select-container {
+  width: 40%; /* Ensure the select takes up the full width of its container */
+}
+
+.border-css {
+  border-style: groove;
+  border: "#0dcaf0";
+}
