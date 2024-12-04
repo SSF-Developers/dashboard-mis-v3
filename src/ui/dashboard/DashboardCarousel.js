@@ -53,7 +53,7 @@ const DashboardCarousel = ({ dashboardData , parentFrequency }) => {
                 showStatus={false}
                 swipeable
               >
-                {dashboard_data?.data?.uiResult?.data.total_usage == 'true' && (
+                {(dashboard_data?.data?.uiResult?.data.total_usage == 'true' && item?.dataSummary?.usage !== 0) && (
                   <>
                   {/* Render StatsItems in the child carousel */}
                     <div className="stats_class">
@@ -69,7 +69,7 @@ const DashboardCarousel = ({ dashboardData , parentFrequency }) => {
                 )}
                 {user?.user?.userRole === 'Super Admin' && (
                   <>
-                   {dashboard_data?.data?.uiResult?.data.collection_stats == 'true' ? (
+                   {(dashboard_data?.data?.uiResult?.data.collection_stats == 'true' && item?.dataSummary?.collection !== 0) ? (
                     <div className="collection_class">
                       <StatsItem
                         name="Collection Stats"
@@ -84,7 +84,7 @@ const DashboardCarousel = ({ dashboardData , parentFrequency }) => {
                 )}
                  {user?.user?.userRole === 'Super Admin' && (
                     <>
-                     {dashboard_data?.data?.uiResult?.data.collection_stats == 'true' && (
+                     {(dashboard_data?.data?.uiResult?.data.collection_stats == 'true' && item?.dataSummary?.upiCollection !== 0) && (
                         <div className="upi_class">
                           <StatsItem
                             name="UPI Stats"
@@ -99,7 +99,7 @@ const DashboardCarousel = ({ dashboardData , parentFrequency }) => {
                   )}
                 {user?.user?.userRole === 'Super Admin' && (
                   <>
-                    {dashboard_data?.data?.uiResult?.data.bwt_stats == 'true' && (
+                    {(dashboard_data?.data?.uiResult?.data.bwt_stats == 'true' && item?.bwtdataSummary?.waterRecycled !== 0) && (
                       <div className="recycle_class">
                         <BWTStatsItem
                           name="Recycled Water"
@@ -112,7 +112,7 @@ const DashboardCarousel = ({ dashboardData , parentFrequency }) => {
                     )}
                   </>
                 )}
-                {dashboard_data?.data?.uiResult?.data.average_feedback == 'true' && (
+                {(dashboard_data?.data?.uiResult?.data.average_feedback == 'true' && item?.dataSummary?.usage !== 0) && (
                   <>
                     <div className="feedback_class">
                       <StatsItem
@@ -140,8 +140,6 @@ const DashboardCarousel = ({ dashboardData , parentFrequency }) => {
 
 const Table = (item) => {  
   // usage calculation
-  console.log('dashboard_data check', item.dashboard_data);
-  console.log('check', item.dashboard_data?.total_usage);
 
   function CalculateMwc(item) {
     let sum = 0;
