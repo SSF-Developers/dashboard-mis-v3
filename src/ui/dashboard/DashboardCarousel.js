@@ -25,6 +25,8 @@ import { dashboard } from "../../features/dashboardSlice";
 const DashboardCarousel = ({ dashboardData , parentFrequency }) => {
   const user = useSelector(selectUser);
   const dashboard_data = useSelector(dashboard);
+  const [role, setRole] = useState(user?.user?.userRole);
+  console.log('role', role)
   if (!dashboardData || dashboardData.length === 0) {
     return <div>No data available</div>;
   }
@@ -45,7 +47,94 @@ const DashboardCarousel = ({ dashboardData , parentFrequency }) => {
         <div key={`${index}-${itemIndex}`}>
           <div>
              {/* Child Carousel */}
-             <Carousel
+             {role == 'Super Admin'
+              ?
+              <>
+                <Carousel
+                  autoPlay
+                  interval={2000} // Child carousel interval (1 second)
+                  infiniteLoop
+                  showThumbs={false}
+                  showStatus={false}
+                  swipeable
+                >
+                  {(dashboard_data?.data?.uiResult?.data.total_usage == 'true') && (
+                    <>
+                    {/* Render StatsItems in the child carousel */}
+                      <div className="stats_class">
+                        <StatsItem
+                          name="Usage Stats"
+                          total={item?.dataSummary?.usage}
+                          data={item?.dashboardChartData?.usage}
+                          pieChartData={item?.pieChartData?.usage}
+                          complex = {item?.complexName}
+                        />
+                      </div> 
+                      </>
+                  )}
+                  {user?.user?.userRole === 'Super Admin' && (
+                    <>
+                    {(dashboard_data?.data?.uiResult?.data.collection_stats == 'true') ? (
+                      <div className="collection_class">
+                        <StatsItem
+                          name="Collection Stats"
+                          total={item?.dataSummary?.collection}
+                          data={item?.dashboardChartData?.collection}
+                          pieChartData={item?.pieChartData?.collection}
+                          complex = {item?.complexName}
+                        />
+                      </div>
+                    ): null }
+                    </>
+                  )}
+                  {user?.user?.userRole === 'Super Admin' && (
+                      <>
+                      {(dashboard_data?.data?.uiResult?.data.collection_stats == 'true') && (
+                          <div className="upi_class">
+                            <StatsItem
+                              name="UPI Stats"
+                              total={item?.dataSummary?.upiCollection}
+                              data={item?.dashboardChartData?.upiCollection}
+                              pieChartData={item?.pieChartData?.upiCollection}
+                              complex = {item?.complexName}
+                            />
+                          </div>
+                      )}
+                      </>
+                    )}
+                  {user?.user?.userRole === 'Super Admin' && (
+                    <>
+                      {(dashboard_data?.data?.uiResult?.data.bwt_stats == 'true') && (
+                        <div className="recycle_class">
+                          <BWTStatsItem
+                            name="Recycled Water"
+                            total={item?.bwtdataSummary?.waterRecycled}
+                            data={item?.bwtdashboardChartData?.waterRecycled}
+                            pieChartData={item?.bwtpieChartData?.usage}
+                            complex = {item?.complexName}
+                          />
+                        </div>
+                      )}
+                    </>
+                  )}
+                  {(dashboard_data?.data?.uiResult?.data.average_feedback == 'true') && (
+                    <>
+                      <div className="feedback_class">
+                        <StatsItem
+                          name="Feedback Stats"
+                          total={item?.dataSummary?.feedback}
+                          data={item?.dashboardChartData?.feedback}
+                          pieChartData={item?.pieChartData?.feedback}
+                          complex = {item?.complexName}
+                        />
+                      </div>
+                    </>
+                  )}
+                </Carousel>
+              </>
+              :
+              <>
+               <Carousel
                 autoPlay
                 interval={2000} // Child carousel interval (1 second)
                 infiniteLoop
@@ -53,7 +142,7 @@ const DashboardCarousel = ({ dashboardData , parentFrequency }) => {
                 showStatus={false}
                 swipeable
               >
-                {(dashboard_data?.data?.uiResult?.data.total_usage == 'true' && item?.dataSummary?.usage !== 0) && (
+                {(dashboard_data?.data?.uiResult?.data.total_usage == 'true') && (
                   <>
                   {/* Render StatsItems in the child carousel */}
                     <div className="stats_class">
@@ -67,52 +156,7 @@ const DashboardCarousel = ({ dashboardData , parentFrequency }) => {
                     </div> 
                     </>
                 )}
-                {user?.user?.userRole === 'Super Admin' && (
-                  <>
-                   {(dashboard_data?.data?.uiResult?.data.collection_stats == 'true' && item?.dataSummary?.collection !== 0) ? (
-                    <div className="collection_class">
-                      <StatsItem
-                        name="Collection Stats"
-                        total={item?.dataSummary?.collection}
-                        data={item?.dashboardChartData?.collection}
-                        pieChartData={item?.pieChartData?.collection}
-                        complex = {item?.complexName}
-                      />
-                    </div>
-                   ): null }
-                   </>
-                )}
-                 {user?.user?.userRole === 'Super Admin' && (
-                    <>
-                     {(dashboard_data?.data?.uiResult?.data.collection_stats == 'true' && item?.dataSummary?.upiCollection !== 0) && (
-                        <div className="upi_class">
-                          <StatsItem
-                            name="UPI Stats"
-                            total={item?.dataSummary?.upiCollection}
-                            data={item?.dashboardChartData?.upiCollection}
-                            pieChartData={item?.pieChartData?.upiCollection}
-                            complex = {item?.complexName}
-                          />
-                        </div>
-                     )}
-                    </>
-                  )}
-                {user?.user?.userRole === 'Super Admin' && (
-                  <>
-                    {(dashboard_data?.data?.uiResult?.data.bwt_stats == 'true' && item?.bwtdataSummary?.waterRecycled !== 0) && (
-                      <div className="recycle_class">
-                        <BWTStatsItem
-                          name="Recycled Water"
-                          total={item?.bwtdataSummary?.waterRecycled}
-                          data={item?.bwtdashboardChartData?.waterRecycled}
-                          pieChartData={item?.bwtpieChartData?.usage}
-                          complex = {item?.complexName}
-                        />
-                      </div>
-                    )}
-                  </>
-                )}
-                {(dashboard_data?.data?.uiResult?.data.average_feedback == 'true' && item?.dataSummary?.usage !== 0) && (
+                {(dashboard_data?.data?.uiResult?.data.average_feedback == 'true') && (
                   <>
                     <div className="feedback_class">
                       <StatsItem
@@ -125,7 +169,9 @@ const DashboardCarousel = ({ dashboardData , parentFrequency }) => {
                     </div>
                   </>
                 )}
-              </Carousel>
+              </Carousel> 
+              </>
+              }
               
           </div>
           {/* Table */}

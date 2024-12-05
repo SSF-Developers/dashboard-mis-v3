@@ -159,14 +159,16 @@ const AppBar = ({ isOnline }) => {
     console.log("error -->", err);
     let text = err.message.includes("expired");
     if (text) {
-      setDialogData({
-        title: "Error",
-        message: err.message,
-        onClickAction: () => {
-          // Handle the action when the user clicks OK
-          console.log(`${Custommessage} -->`, err);
-        },
-      });
+      // console.log('find expired',text)
+      confirmSignOut()
+      // setDialogData({
+      //   title: "Error",
+      //   message: err.message,
+      //   onClickAction: () => {
+      //     // Handle the action when the user clicks OK
+      //     console.log(`${Custommessage} -->`, err);
+      //   },
+      // });
     } else {
       setDialogData({
         title: "Error",
@@ -227,6 +229,7 @@ const AppBar = ({ isOnline }) => {
 
   const initFetchCompletedUserAccessTreeAction = async () => {
     try {
+      console.log('user?.user.userName not found', user?.user.userName)
       const result = await executeFetchCompletedUserAccessTree(
         user?.user.userName,
         user?.credentials
@@ -448,31 +451,36 @@ const AppBar = ({ isOnline }) => {
   };
 
   const syncFunction = async () => {
-    dispatch(setLoadingPdf(true));
-    console.log("syncFunction click");
-    if (isOnline == false) {
-      setDialogData({
-        title: "No Network",
-        message: "Please try again later",
-        onClickAction: () => {
-          // Handle the action when the user clicks OK
-          console.log(`syncFunction -->`);
-        },
-      });
-      return;
+    try {
+        dispatch(setLoadingPdf(true));
+        console.log("syncFunction click");
+        if (isOnline == false) {
+          setDialogData({
+            title: "No Network",
+            message: "Please try again later",
+            onClickAction: () => {
+              // Handle the action when the user clicks OK
+              console.log(`syncFunction -->`);
+            },
+          });
+          return;
+        }
+        let result_90 = await executeFetchDashboardLambda(
+          user?.username,
+          "90",
+          "all",
+          user?.credentials
+        );
+        console.log("result_90", result_90);
+        setLocalStorageItem("dashboard_90", JSON.stringify(result_90));
+        await fetch_dashboard();
+        await initFetchCompletedUserAccessTreeAction();
+        console.log("syncFunction is Complete");
+        dispatch(setLoadingPdf(false));
+    } catch (err) {
+      // Catch an error here
+      handleError(err, "sync data");
     }
-    let result_90 = await executeFetchDashboardLambda(
-      user?.username,
-      "90",
-      "all",
-      user?.credentials
-    );
-    console.log("result_90", result_90);
-    setLocalStorageItem("dashboard_90", JSON.stringify(result_90));
-    await fetch_dashboard();
-    await initFetchCompletedUserAccessTreeAction();
-    console.log("syncFunction is Complete");
-    dispatch(setLoadingPdf(false));
   };
 
   console.log("triggerFunction", triggerFunction);
