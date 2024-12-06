@@ -91,7 +91,7 @@ const AppBar = ({ isOnline }) => {
     const interval = setInterval(() => {
       console.log('interval is trigger')
       syncFunction();
-    }, 3 * 60 * 60 * 1000);
+    }, 30 * 60 * 1000);
 
     // Cleanup interval on component unmount
     return () => clearInterval(interval);
